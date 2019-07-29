@@ -1,6 +1,7 @@
 package com.javadevjournal.demoproject.com.javadevjournal.demoproject.model;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -10,19 +11,32 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     private long id;
-    private long clientId;
-    private boolean transactionType;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "client_id")
+    private Client client;
+
+    @Enumerated(value = EnumType.STRING)
+    private TransactionType transactionType;
+
+    @Temporal(TemporalType.TIMESTAMP)
     private Date transactionDate;
+
+    private BigDecimal amount;
+
 
     public Transaction() {
     }
 
-    public Transaction(long id, long clientId, boolean transactionType, Date transactionDate) {
+
+    public Transaction(long id, Client client, TransactionType transactionType, Date transactionDate, BigDecimal amount) {
         this.id = id;
-        this.clientId = clientId;
+        this.client = client;
         this.transactionType = transactionType;
         this.transactionDate = transactionDate;
+        this.amount = amount;
     }
+
 
     public long getId() {
         return id;
@@ -32,19 +46,19 @@ public class Transaction {
         this.id = id;
     }
 
-    public long getClientId() {
-        return clientId;
+    public Client getClient() {
+        return client;
     }
 
-    public void setClientId(long clientId) {
-        this.clientId = clientId;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
-    public boolean isTransactionType() {
+    public TransactionType getTransactionType() {
         return transactionType;
     }
 
-    public void setTransactionType(boolean transactionType) {
+    public void setTransactionType(TransactionType transactionType) {
         this.transactionType = transactionType;
     }
 
@@ -54,5 +68,13 @@ public class Transaction {
 
     public void setTransactionDate(Date transactionDate) {
         this.transactionDate = transactionDate;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 }
